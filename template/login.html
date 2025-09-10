@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect to News Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container, .register-container {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            text-align: center;
+            width: 300px;
+        }
+        h2 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #d42f2f;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #b22222;
+        }
+        p {
+            margin-top: 10px;
+        }
+        a {
+            color: #d42f2f;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Sign In</h2>
+        <form id="loginForm" method="POST" action="/login.html">
+            <label for="username">User Name:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit" >Sign in</button>
+        </form>
+        <p>Don't have an account? <a href="#" id="registerLink">sign up here</a></p>
+    </div>
+
+    <div class="register-container" style="display: none;">
+        <h2>Sign Up</h2>
+        <form id="registerForm" method="POST">
+            <label for="newUsername">User Name:</label>
+            <input type="text" id="newUsername" name="newUsername" required>
+            
+            <label for="newPassword">Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+            
+            <button type="submit" >Sign up</button>
+        </form>
+        <p>Already have an account? <a href="#" id="loginLink">sign in here</a></p>
+    </div>
+
+    <script>
+        document.getElementById('registerLink').addEventListener('click', function() {
+            document.querySelector('.login-container').style.display = 'none';
+            document.querySelector('.register-container').style.display = 'block';
+        });
+        
+        document.getElementById('loginLink').addEventListener('click', function() {
+            document.querySelector('.register-container').style.display = 'none';
+            document.querySelector('.login-container').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
