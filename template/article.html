@@ -45,7 +45,7 @@
                         <i class="fas fa-user"></i>Written by {{ reporter.firstname }} {{ reporter.lastname }}.
                         {{ article.publishdate.strftime('%B %d, %Y') }}
                     </small>
-                    <div class="category category-ent">Category {{ article.categoryid }}</div>
+                    <div class="category category-ent">{{ category.categoryname }}</div>
                 </div>
 
                 <p>{{ article.content }}</p>

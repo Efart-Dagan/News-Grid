@@ -2,6 +2,7 @@ import pyodbc
 from flask import Flask, render_template, request, redirect, url_for
 from models import login_model, Article_model
 from models.Reporters_model import get_reporter_info_by_id
+from models.Category_model import get_category_by_id
 
 app = Flask(__name__, static_url_path='', static_folder='static', template_folder='template')
 
@@ -34,7 +35,8 @@ def article_details(article_id):
     if not article:
         return "Article not found"
     reporter = get_reporter_info_by_id(article['reporterid'])
-    return render_template("article.html", article=article, reporter=reporter)
+    category = get_category_by_id(article['categoryid'])
+    return render_template("article.html", article=article, reporter=reporter, category=category)
 
 
 if __name__ == '__main__':

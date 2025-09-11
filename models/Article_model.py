@@ -44,3 +44,6 @@ def get_article_by_id(article_id):
 
     article_data = {desc[0].lower(): getattr(row, desc[0]) for desc in cursor.description}
     return article_data
+
+def add_article(Title, Content, PublishDate, CategoryID, ReporterID, ImageID, ViewsCount):
+
