@@ -114,3 +114,57 @@ def add_article(Title, Content, PublishDate, CategoryID, ReporterID, ImageID, Vi
         "article_id": new_article_id,
         "reporter_id": ReporterID
     }
+
+
+# def get_articles_by_categoryId(categoryId):
+#     try:
+#         with connection.cursor() as cursor:
+#             query = """"
+#                 select ArticleID, Title, Content, PublishDate, CategoryID, ReporterID, Image, ViewsCount from Articles
+#                 where CategoryID =? """
+#             cursor.execute(query, categoryId)
+#             row = cursor.fetchall()
+#     except Exception as e:
+#         return f"Database error: {e}"
+#
+#     if not row:
+#         return None
+#
+#     article_data = {}
+#     for desc in cursor.description:
+#         value = getattr(row, desc[0])
+#         # המרה ל-datetime אם זה התאריך
+#         if desc[0].lower() == 'publishdate' and isinstance(value, str):
+#             value = datetime.strptime(value, '%Y-%m-%d')  # או הפורמט שלך
+#         article_data[desc[0].lower()] = value
+#
+#     return article_data
+
+def get_articles_by_categoryId(categoryId):
+    try:
+        with connection.cursor() as cursor:
+            query = """
+                SELECT ArticleID, Title, Content, PublishDate, CategoryID, ReporterID, Image, ViewsCount
+                FROM Articles
+                WHERE CategoryID = ?
+            """
+            cursor.execute(query, (categoryId,))
+            rows = cursor.fetchall()
+    except Exception as e:
+        return f"Database error: {e}"
+
+    if not rows:
+        return []
+
+    articles_list = []
+    for row_item in rows:
+        article_data = {}
+        for idx, desc in enumerate(cursor.description):
+            value = row_item[idx]
+            # המרה ל‑datetime אם זה התאריך
+            if desc[0].lower() == 'publishdate' and isinstance(value, str):
+                value = datetime.strptime(value, '%Y-%m-%d')
+            article_data[desc[0].lower()] = value
+        articles_list.append(article_data)
+
+    return articles_list

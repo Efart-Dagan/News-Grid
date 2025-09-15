@@ -59,12 +59,17 @@
             <aside id="categories" class="card">
                 <h2>Categories</h2>
                 <ul class="list">
-                    <li><a href="#"><i class="fas fa-chevron-right"></i>Sports</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i>Entertainment</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i>Technology</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i>Fashion</a></li>
+                    {% for cat in categories %}
+                    <li>
+                        <a href="{{ url_for('filter_by_category', category_id=cat.CategoryID) }}">
+                            <i class="fas fa-chevron-right"></i> {{ cat.CategoryName }}
+                        </a>
+                    </li>
+                    {% endfor %}
+
                 </ul>
             </aside>
+
         </div>
     </div>
 </section>

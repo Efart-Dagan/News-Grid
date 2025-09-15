@@ -5,8 +5,8 @@ from flask import Flask, render_template, session
 from models.config import connection
 
 
-def set_current_user(user):
-    session["user_id"] = user["UserID"]
+def set_current_user(user_id):
+    session["user_id"] = user_id
 
 
 def get_current_user():
@@ -14,6 +14,11 @@ def get_current_user():
     if user_id:
         return get_user_by_id(user_id)
     return None
+
+## קריאה נשארת כמו שיש לך:
+
+# פונקציה מתוקנת:
+
 
 
 def sign_up(firstName, lastName, mail, password, imgUrl):
@@ -55,17 +60,17 @@ def sign_up(firstName, lastName, mail, password, imgUrl):
         raise
 
 
-def sign_in(username, password):
+def sign_in(Email, password):
     with connection.cursor() as cursor:
-        query = "SELECT * FROM Users WHERE FirstName=? AND PasswordHash=?"
-        cursor.execute(query, (username, password))
+        query = "SELECT * FROM Users WHERE Email=? AND PasswordHash=?"
+        cursor.execute(query, (Email, password))
         row = cursor.fetchone()
         if row:
             return [{"UserID": row[0], "FirstName": row[1], "LastName": row[2], "PasswordHash": row[3], "Email": row[4],
                      "ProfilePictureURL": row[5], "AccountStatus": row[6], "type": "user"}]
         else:
-            query = "SELECT * FROM Reporters WHERE FirstName=? AND PasswordHash=?"
-            cursor.execute(query, (username, password))
+            query = "SELECT * FROM Reporters WHERE Email=? AND PasswordHash=?"
+            cursor.execute(query, (Email, password))
             row = cursor.fetchone()
             if row:
                 return [{"ReporterID": row[0], "FirstName": row[1], "LastName": row[2], "PasswordHash": row[3],

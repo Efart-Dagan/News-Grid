@@ -27,11 +27,13 @@
         {% if current_user %}
         <div>
             <h4>Hello {{ current_user.FirstName }} {{ current_user.LastName }}</h4>
+            <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
         </div>
         {% endif %}
 
+
         <ul>
-            <li><a href="index.html" class="current">Home</a></li>
+            <li><a href="{{ url_for('index') }}" class="current">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="{{ url_for('add_article_page') }}">article</a></li>
             <li><a href="{{ url_for('add_category_page') }}">category</a></li>
@@ -57,109 +59,142 @@
         </div>
     </div>
 </header>
-
 <section id="home-articles" class="py-2">
     <div class="container">
         <h2>Editors Picks</h2>
         <div class="articles-container">
 
-            {% if articles and articles != "No Articles Found" %}
+            {% if articles %}
             {% for article in articles %}
             <article class="card">
-                {% if article.image %}
-                <img src="{{ article.image }}" alt="photo">
+                {% if article['image'] %}
+                <img src="{{ article['image'] }}" alt="{{ article['title'] }}">
                 {% endif %}
-                <div class="category category-{{ article.category | lower }}">
-                    {{ article.category }}
+
+                <div class="category category-{{ article['categoryid'] | lower }}">
+                    Category ID: {{ article['categoryid'] }}
                 </div>
+
                 <h3>
-                    <p> {{ article.publishdate }} </p>
-                    <a href="{{ url_for('article_details', article_id=article.articleid) }}">{{ article.title }}</a>
-                    <!--                    <a href="article.html">{{ article.title }}</a>-->
+                    <p>{{ article['publishdate'] }}</p>
+                    <a href="{{ url_for('article_details', article_id=article['articleid']) }}">
+                        {{ article['title'] }}
+                    </a>
                 </h3>
-                <p>{{ article.content[:150] }}...</p>
+
+                <p>{{ article['content'][:150] }}...</p>
             </article>
             {% endfor %}
             {% else %}
             <p>No articles found.</p>
             {% endif %}
 
-
-
-            <article class="card bg-dark">
-                <div class="category category-sports">
-                    Sports
-                </div>
-                <h3>
-                    <a href="article.html">Lorem ipsum dolor sit amet.</a>
-                </h3>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium numquam illum ipsa corporis
-                    nemo beatae odio exercitationem vel, sit porro?</p>
-            </article>
-
-            <article class="card">
-                <img src="img/articles/tech1.jpg" alt="photo">
-                <div class="category category-tech">
-                    Technology
-                </div>
-                <h3>
-                    <a href="article.html">Lorem ipsum dolor sit amet.</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum expedita quam quibusdam ipsum nemo
-                    maiores. Cum ipsa amet quaerat sunt.</p>
-            </article>
-
-            <article class="card">
-                <div class="category category-sports">
-                    Sports
-                </div>
-                <h3>
-                    <a href="article.html">Lorem ipsum dolor sit amet.</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum expedita quam quibusdam ipsum nemo
-                    maiores. Cum ipsa amet quaerat sunt.</p>
-                <img src="img/articles/sports1.jpg" alt="photo">
-            </article>
-
-            <article class="card">
-                <img src="img/articles/tech2.jpg" alt="photo">
-                <div class="category category-tech">
-                    Technology
-                </div>
-                <h3>
-                    <a href="article.html">Lorem ipsum dolor sit amet.</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum expedita quam quibusdam ipsum nemo
-                    maiores. Cum ipsa amet quaerat sunt.</p>
-            </article>
-
-            <article class="card bg-primary">
-                <div class="category category-sports">
-                    Sports
-                </div>
-                <h3>
-                    <a href="article.html">Lorem ipsum dolor sit amet.</a>
-                </h3>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium numquam illum ipsa corporis
-                    nemo beatae odio exercitationem vel, sit porro?</p>
-            </article>
-
-            <article class="card">
-                <div>
-                    <div class="category category-ent">
-                        Entertainment
-                    </div>
-                    <h3>
-                        <a href="article.html">Lorem ipsum dolor sit amet.</a>
-                    </h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, facere harum dicta dolor
-                        molestias amet eos! Doloribus molestiae cum accusamus?</p>
-                </div>
-                <img src="img/articles/ent2.jpg" alt="photo">
-            </article>
         </div>
     </div>
 </section>
+
+<!--<section id="home-articles" class="py-2">-->
+<!--    <div class="container">-->
+<!--        <h2>Editors Picks</h2>-->
+<!--        <div class="articles-container">-->
+
+<!--            {% if articles and articles != "No Articles Found" %}-->
+<!--            {% for article in articles %}-->
+<!--            <article class="card">-->
+<!--                {% if article.image %}-->
+<!--                <img src="{{ article.image }}" alt="photo">-->
+<!--                {% endif %}-->
+<!--                <div class="category category-{{ article.category | lower }}">-->
+<!--                    {{ article.category }}-->
+<!--                </div>-->
+<!--                <h3>-->
+<!--                    <p> {{ article.publishdate }} </p>-->
+<!--                    <a href="{{ url_for('article_details', article_id=article['articleid']) }}">{{ article['title'] }}</a>-->
+
+<!--                    &lt;!&ndash;                    <a href="article.html">{{ article.title }}</a>&ndash;&gt;-->
+<!--                </h3>-->
+<!--                <p>{{ article.content[:150] }}...</p>-->
+<!--            </article>-->
+<!--            {% endfor %}-->
+<!--            {% else %}-->
+<!--            <p>No articles found.</p>-->
+<!--            {% endif %}-->
+
+
+<!--            <article class="card bg-dark">-->
+<!--                <div class="category category-sports">-->
+<!--                    Sports-->
+<!--                </div>-->
+<!--                <h3>-->
+<!--                    <a href="article.html">Lorem ipsum dolor sit amet.</a>-->
+<!--                </h3>-->
+<!--                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium numquam illum ipsa corporis-->
+<!--                    nemo beatae odio exercitationem vel, sit porro?</p>-->
+<!--            </article>-->
+
+<!--            <article class="card">-->
+<!--                <img src="img/articles/tech1.jpg" alt="photo">-->
+<!--                <div class="category category-tech">-->
+<!--                    Technology-->
+<!--                </div>-->
+<!--                <h3>-->
+<!--                    <a href="article.html">Lorem ipsum dolor sit amet.</a>-->
+<!--                </h3>-->
+<!--                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum expedita quam quibusdam ipsum nemo-->
+<!--                    maiores. Cum ipsa amet quaerat sunt.</p>-->
+<!--            </article>-->
+
+<!--            <article class="card">-->
+<!--                <div class="category category-sports">-->
+<!--                    Sports-->
+<!--                </div>-->
+<!--                <h3>-->
+<!--                    <a href="article.html">Lorem ipsum dolor sit amet.</a>-->
+<!--                </h3>-->
+<!--                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum expedita quam quibusdam ipsum nemo-->
+<!--                    maiores. Cum ipsa amet quaerat sunt.</p>-->
+<!--                <img src="img/articles/sports1.jpg" alt="photo">-->
+<!--            </article>-->
+
+<!--            <article class="card">-->
+<!--                <img src="img/articles/tech2.jpg" alt="photo">-->
+<!--                <div class="category category-tech">-->
+<!--                    Technology-->
+<!--                </div>-->
+<!--                <h3>-->
+<!--                    <a href="article.html">Lorem ipsum dolor sit amet.</a>-->
+<!--                </h3>-->
+<!--                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum expedita quam quibusdam ipsum nemo-->
+<!--                    maiores. Cum ipsa amet quaerat sunt.</p>-->
+<!--            </article>-->
+
+<!--            <article class="card bg-primary">-->
+<!--                <div class="category category-sports">-->
+<!--                    Sports-->
+<!--                </div>-->
+<!--                <h3>-->
+<!--                    <a href="article.html">Lorem ipsum dolor sit amet.</a>-->
+<!--                </h3>-->
+<!--                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium numquam illum ipsa corporis-->
+<!--                    nemo beatae odio exercitationem vel, sit porro?</p>-->
+<!--            </article>-->
+
+<!--            <article class="card">-->
+<!--                <div>-->
+<!--                    <div class="category category-ent">-->
+<!--                        Entertainment-->
+<!--                    </div>-->
+<!--                    <h3>-->
+<!--                        <a href="article.html">Lorem ipsum dolor sit amet.</a>-->
+<!--                    </h3>-->
+<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, facere harum dicta dolor-->
+<!--                        molestias amet eos! Doloribus molestiae cum accusamus?</p>-->
+<!--                </div>-->
+<!--                <img src="img/articles/ent2.jpg" alt="photo">-->
+<!--            </article>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
 
 <footer id='main-footer' class='py-2'>
     <div class="container footer-container">

@@ -213,6 +213,7 @@
 import pyodbc
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from models import login_model, Article_model
+from models.Article_model import get_articles_by_categoryId
 from models.Reporters_model import get_reporter_info_by_id
 from models.Category_model import get_category_by_id, add_category, get_all_categories
 from models.login_model import is_valid, set_current_user, get_current_user
@@ -226,9 +227,9 @@ conn_str = "DRIVER={SQL Server};SERVER=DESKTOP-F6TEN9G;DATABASE=news;"
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        Email = request.form['Email']
         password = request.form['password']
-        user = login_model.sign_in(username, password)
+        user = login_model.sign_in(Email, password)
 
         if user:
             set_current_user(user[0]["UserID"])
@@ -270,7 +271,8 @@ def article_details(article_id):
         return "Article not found"
     reporter = get_reporter_info_by_id(article['reporterid'])
     category = get_category_by_id(article['categoryid'])
-    return render_template("article.html", article=article, reporter=reporter, category=category)
+    categories = get_all_categories()
+    return render_template("article.html", article=article, reporter=reporter, category=category, categories=categories)
 
 
 @app.route('/add_category', methods=['GET', 'POST'])
@@ -310,6 +312,34 @@ def add_article_page():
         return redirect(url_for("index"))
 
     return render_template("add_article.html", categories=categories)
+
+
+@app.route("/logout")
+def logout():
+    session.clear()  # מוחק את כל הנתונים של המשתמש מה־session
+    return redirect(url_for("index"))  # או לדף הבית אם תרצה
+
+
+# @app.route('/byCategoryId/<int:category_id>')
+# def filter_by_category(category_id):
+#     try:
+#         articles = get_articles_by_categoryId(category_id)  # מערך כתבות מהקטגוריה
+#     except Exception as e:
+#         return f"Database error: {e}"
+#
+#     if not articles:
+#         articles = []  # כדי שה-template לא יתלונן
+#
+#     # שולחים רק את הכתבות ל-template
+#     return render_template("index.html", articles=articles)
+#
+
+@app.route('/byCategoryId/<int:category_id>')
+def filter_by_category(category_id):
+    articles = get_articles_by_categoryId(category_id)
+    print("ARTICLES:", articles)  # הוסיפי שורה זו
+    user = get_current_user()
+    return render_template("index.html", articles=articles, current_user=user)
 
 
 if __name__ == '__main__':

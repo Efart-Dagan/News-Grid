@@ -43,8 +43,8 @@
         <p class="error">{{ login_error }}</p>
         {% endif %}
         <form id="loginForm" method="POST" action="{{ url_for('login') }}">
-            <label for="loginUsername">User Name:</label>
-            <input type="text" id="loginUsername" name="username" required>
+            <label for="loginUsername">Email:</label>
+            <input type="text" id="loginUsername" name="Email" required>
 
             <label for="loginPassword">Password:</label>
             <input type="password" id="loginPassword" name="password" required>
