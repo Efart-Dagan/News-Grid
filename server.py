@@ -265,6 +265,7 @@ def index():
 @app.route('/article/<int:article_id>')
 def article_details(article_id):
     article = Article_model.get_article_by_id(article_id)
+    print(article)
     if not article:
         return "Article not found"
     reporter = get_reporter_info_by_id(article['reporterid'])

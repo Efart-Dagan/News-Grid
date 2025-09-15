@@ -40,7 +40,7 @@ def get_article_by_id(article_id):
     try:
         with connection.cursor() as cursor:
             query = """
-                SELECT ArticleID, Title, Content, PublishDate, CategoryID, ReporterID, ImageID, ViewsCount
+                SELECT ArticleID, Title, Content, PublishDate, CategoryID, ReporterID, Image, ViewsCount
                 FROM Articles
                 WHERE ArticleID = ?
             """
