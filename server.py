@@ -211,15 +211,16 @@
 # # DeleteUserByPaF()
 # #
 import pyodbc
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from models import login_model, Article_model
 from models.Reporters_model import get_reporter_info_by_id
 from models.Category_model import get_category_by_id, add_category, get_all_categories
-from models.login_model import isValid
-app = Flask(__name__, static_url_path='', static_folder='static', template_folder='template')
-app.secret_key = "any_secret_key_you_like"
+from models.login_model import is_valid, set_current_user, get_current_user
 
-conn_str = "DRIVER={SQL Server};SERVER=RIVI;DATABASE=news;"
+app = Flask(__name__, static_url_path='', static_folder='static', template_folder='template')
+app.secret_key = "current_user_id"
+
+conn_str = "DRIVER={SQL Server};SERVER=DESKTOP-F6TEN9G;DATABASE=news;"
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -228,22 +229,28 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = login_model.sign_in(username, password)
-        return redirect(url_for('index'))
+
+        if user:
+            set_current_user(user[0]["UserID"])
+            return redirect(url_for("index"))
+        else:
+            return render_template('login.html', login_error="Invalid credentials")
+
     return render_template('login.html')
 
 
 @app.route('/signup', methods=['POST'])
-def signup_route():  # שם שונה מהפונקציה login_model.sign_up
-    # כאן תקרא ל-login_model.sign_up
+def signup_route():
     firstName = request.form['firstName']
     lastName = request.form['lastName']
     mail = request.form['mail']
     password = request.form['password']
-    imgUrl = request.form['imgUrl']
+    img = request.form['imgUrl']
 
     try:
-        user = login_model.sign_up(firstName, lastName, mail, password, imgUrl)
-        return redirect(url_for('login'))
+        user = login_model.sign_up(firstName, lastName, mail, password, img)
+        set_current_user(user["UserID"])
+        return redirect(url_for('index'))
     except Exception as e:
         return render_template('login.html', signup_error=str(e))
 
@@ -251,40 +258,9 @@ def signup_route():  # שם שונה מהפונקציה login_model.sign_up
 @app.route('/')
 def index():
     articles = Article_model.get_all_articles()
-    return render_template('index.html', articles=articles)
+    user = get_current_user()
+    return render_template('index.html', articles=articles, current_user=user)
 
-
-# @app.route('/signup', methods=['POST'])
-# def signup():
-#     try:
-#         with pyodbc.connect(conn_str) as connection:
-#             firstName = request.form['firstName']
-#             lastName = request.form['lastName']
-#             password = request.form['password']
-#             mail = request.form['mail']
-#             imgUrl = request.form['imgUrl']
-#
-#             # Validate the password
-#             validation, message = isValid(password)
-#             if not validation:
-#                 raise ValueError(message)
-#
-#             cursor = connection.cursor()
-#             query = """
-#                     INSERT INTO Users (firstName, lastName, password, mail, imgUrl, status)
-#                     VALUES (?, ?, ?, ?, ?, ?)
-#                 """
-#             values = (firstName, lastName, password, mail, imgUrl, 'Active')
-#             cursor.execute(query, values)
-#             connection.commit()
-#
-#         return redirect(url_for('login'))  # אחרי הרשמה מעבירים למסך login
-#
-#     except ValueError as ve:
-#         return f"Validation error: {ve}", 400
-#     except Exception as e:
-#         return f"An error occurred: {e}", 500
-#
 
 @app.route('/article/<int:article_id>')
 def article_details(article_id):

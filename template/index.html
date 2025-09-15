@@ -23,6 +23,13 @@
             <a href="http://instagram.com.br" target='blank'><i class="fab fa-instagram fa-2x"></i></a>
             <a href="http://youtube.com.br" target='blank'><i class="fab fa-youtube fa-2x"></i></a>
         </div>
+
+        {% if current_user %}
+        <div>
+            <h4>Hello {{ current_user.FirstName }} {{ current_user.LastName }}</h4>
+        </div>
+        {% endif %}
+
         <ul>
             <li><a href="index.html" class="current">Home</a></li>
             <li><a href="about.html">About</a></li>
