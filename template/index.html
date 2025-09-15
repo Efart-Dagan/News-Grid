@@ -26,12 +26,9 @@
         <ul>
             <li><a href="index.html" class="current">Home</a></li>
             <li><a href="about.html">About</a></li>
+            <li><a href="{{ url_for('add_article_page') }}">article</a></li>
+            <li><a href="{{ url_for('add_category_page') }}">category</a></li>
         </ul>
-        <a href="{{ url_for('add_article_page') }}" class="btn btn-primary" style="margin-left: 10px;">
-            הוסף כתבה
-        </a>
-
-        <a href="{{ url_for('add_category_page') }}" class="btn btn-secondary">הוספת קטגוריה</a>
 
 
     </div>
@@ -62,8 +59,8 @@
             {% if articles and articles != "No Articles Found" %}
             {% for article in articles %}
             <article class="card">
-                {% if article.image_url %}
-                <img src="{{ article.image_url }}" alt="photo">
+                {% if article.image %}
+                <img src="{{ article.image }}" alt="photo">
                 {% endif %}
                 <div class="category category-{{ article.category | lower }}">
                     {{ article.category }}
@@ -80,19 +77,7 @@
             <p>No articles found.</p>
             {% endif %}
 
-            <article class="card">
-                <img src="img/articles/ent1.jpg" alt="photo">
-                <div>
-                    <div class="category category-ent">
-                        Entertainment
-                    </div>
-                    <h3>
-                        <a href="article.html">Lorem ipsum dolor sit amet.</a>
-                    </h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, facere harum dicta dolor
-                        molestias amet eos! Doloribus molestiae cum accusamus?</p>
-                </div>
-            </article>
+
 
             <article class="card bg-dark">
                 <div class="category category-sports">

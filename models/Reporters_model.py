@@ -3,6 +3,16 @@ from flask import Flask, render_template
 from models.config import connection
 
 
+# def get_reporter_info_by_id(reporter_id):
+#     with connection.cursor() as cursor:
+#         query = "SELECT * FROM Reporters WHERE ReporterID = ?"
+#         cursor.execute(query, (reporter_id,))
+#         row = cursor.fetchone()
+#         if not row:
+#             return None
+#         reporter_data = {desc[0].lower(): getattr(row, desc[0]) for desc in cursor.description}
+#         return reporter_data
+
 def get_reporter_info_by_id(reporter_id):
     with connection.cursor() as cursor:
         query = "SELECT * FROM Reporters WHERE ReporterID = ?"
@@ -10,9 +20,9 @@ def get_reporter_info_by_id(reporter_id):
         row = cursor.fetchone()
         if not row:
             return None
-        reporter_data = {desc[0].lower(): getattr(row, desc[0]) for desc in cursor.description}
+        # דרך 1: עם sqlite3.Row או pyodbc.Row
+        reporter_data = {column[0].lower(): row[i] for i, column in enumerate(cursor.description)}
         return reporter_data
-
 
 # def get_student_info(firstName, lastName):
 #     with connection.cursor() as cursor:
